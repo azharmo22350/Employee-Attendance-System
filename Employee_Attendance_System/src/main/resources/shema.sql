@@ -35,3 +35,30 @@ CREATE TABLE employee(
                          CONSTRAINT fk_branch FOREIGN KEY (branch_id) REFERENCES branch(id_branch) ON UPDATE CASCADE ,
                          CONSTRAINT fk_employmentstatus FOREIGN KEY (employment_status) REFERENCES employmentstatus(id) ON UPDATE CASCADE
 );
+
+
+-- exicute after employee is creater
+CREATE TABLE attendance(
+                           id INT AUTO_INCREMENT NOT NULL ,
+                           id_employee VARCHAR(20)  NOT NULL ,
+                           CONSTRAINT pk_attendance PRIMARY KEY (id,id_employee),
+                           type VARCHAR(3) CHECK (type in ('IN','OUT')),
+                           timestamp TIMESTAMP NOT NULL,
+                           CONSTRAINT fk_attandance FOREIGN KEY (id_employee) REFERENCES employee(id) ON UPDATE CASCADE
+
+);
+DROP TABLE attendance;
+
+-- exicute after employee is created
+CREATE TABLE terminationrequest(
+                                   id INT AUTO_INCREMENT NOT NULL ,
+                                   requested_by VARCHAR(20) NOT NULL ,
+                                   CONSTRAINT pk_terminate_request PRIMARY KEY (id,requested_by),
+                                   id_employee VARCHAR(20) NOT NULL ,
+                                   status VARCHAR(10) CHECK (status in ('PENDING','ACCEPT','REJECT')),
+                                   reason VARCHAR(300) NOT NULL ,
+                                   request_date DATE NOT NULL,
+                                   CONSTRAINT fk_termination FOREIGN KEY (requested_by) REFERENCES employee(id) ON UPDATE CASCADE
+
+);
+
